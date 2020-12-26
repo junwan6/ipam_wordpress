@@ -259,3 +259,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pycipam_wordpress/connection.cs
+
+# Jun 12/15/2020
+ipam_wordpress/connection.cs
