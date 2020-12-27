@@ -36,7 +36,12 @@ namespace ipam_wordpress
         /// <summary>
         /// The i post
         /// </summary>
-        private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_title, post_status, comment_status, ping_status, post_name, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_title, @post_status, @comment_status, @ping_status, @post_name, @post_parent, @post_type); SELECT last_insert_id();";
+        /// Added by Jun 12/2020
+        /// The post_content, post_excerpt, to_ping, pinged, post_content_filtered
+        /// in Wordpress post table need to have an value instead of null
+        /// T12262020 - A - create - workshop
+        /// private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_title, post_status, comment_status, ping_status, post_name, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_title, @post_status, @comment_status, @ping_status, @post_name, @post_parent, @post_type); SELECT last_insert_id();";
+        private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_name, to_ping, pinged, post_content_filtered, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_content, @post_title, @post_excerpt, @post_status, @comment_status, @ping_status, @post_name, @to_ping, @pinged, @post_content_filtered, @post_parent, @post_type); SELECT last_insert_id();";
         /// <summary>
         /// The i meta
         /// </summary>
@@ -143,6 +148,37 @@ namespace ipam_wordpress
         /// </summary>
         private const int post_author = 4;
         /// <summary>
+        /// The post content
+        /// </summary>
+        /// T12262020-A-create-workshop
+        /// By Jun 12/2020
+        private const String post_content = "";
+        /// <summary>
+        /// The post excerpt
+        /// </summary>
+        /// T12262020-A-create-workshop
+        /// By Jun 12/2020
+        private const String post_excerpt = "";
+        /// <summary>
+        /// The to_ping
+        /// </summary>
+        /// T12262020-A-create-workshop
+        /// By Jun 12/2020
+        private const String to_ping = "";
+        /// <summary>
+        /// The pinged
+        /// </summary>
+        /// T12262020-A-create-workshop
+        /// By Jun 12/2020
+        private const String pinged = "";
+        /// <summary>
+        /// The post content filtered
+        /// </summary>
+        /// T12262020-A-create-workshop
+        /// By Jun 12/2020
+        private const String post_content_filtered = "";
+
+        /// <summary>
         /// The post lpparent
         /// </summary>
         private const int post_lpparent = 41;
@@ -239,6 +275,27 @@ namespace ipam_wordpress
             /// The post author
             /// </summary>
             public int post_author;
+            /// <summary>
+            /// T12262020-A-create-workshop
+            /// By Jun 12/2020
+            public String post_content;
+            /// </summary>
+            /// <summary>
+            /// T12262020-A-create-workshop
+            /// By Jun 12/2020
+            public String post_excerpt;
+            /// <summary>
+            /// T12262020-A-create-workshop
+            /// By Jun 12/2020
+            public String to_ping;
+            /// <summary>
+            /// T12262020-A-create-workshop
+            /// By Jun 12/2020
+            public String pinged;
+            /// <summary>
+            /// T12262020-A-create-workshop
+            /// By Jun 12/2020
+            public String post_content_filtered;
             /// <summary>
             /// The post identifier
             /// </summary>
@@ -393,6 +450,15 @@ namespace ipam_wordpress
             _p.post_type = post_type;
             _p.comment_status = sub_status;
             _p.ping_status = sub_status;
+            // Added by Jun 12/2020
+            // The post_content in Wordpress post table need to have an value instead of null
+            // T12262020 - A - create - workshop
+            _p.post_content = post_content;
+            _p.post_excerpt = post_excerpt;
+            _p.to_ping = to_ping;
+            _p.pinged = pinged;
+            _p.post_content_filtered = post_content_filtered;
+            
         }
 
         /// <summary>
@@ -509,6 +575,14 @@ namespace ipam_wordpress
             _p.post_id = _id;
             _p.post_slug = _pn.ToLower().Replace(",", "").Replace(":", "").Replace(";", "").Replace(".", "").Replace(' ', '-');
             _p.post_title = _pn;
+            // Added by Jun 12/2020
+            // The post_content in Wordpress post table need to have an value instead of null
+            // T12262020 - A - create - workshop
+            _p.post_content = "";
+            _p.post_excerpt = "";
+            _p.to_ping = "";
+            _p.pinged = "";
+            _p.post_content_filtered = "";
             switch (_pt)
             {
                 case sql_lpparent:
@@ -579,7 +653,17 @@ namespace ipam_wordpress
                 _cmd.Parameters.AddWithValue("@post_author", _p.post_author);
                 _cmd.Parameters.AddWithValue("@post_date", DateTime.Now);
                 _cmd.Parameters.AddWithValue("@post_date_gmt", DateTime.Now);
+                // T12262020-A-create-workshop
+                // By Jun 12/2020
+                _cmd.Parameters.AddWithValue("@post_content", _p.post_content);
                 _cmd.Parameters.AddWithValue("@post_title", _p.post_title);
+                _cmd.Parameters.AddWithValue("@to_ping", _p.to_ping);
+                _cmd.Parameters.AddWithValue("@pinged", _p.pinged);
+                _cmd.Parameters.AddWithValue("@post_content_filtered", _p.post_content_filtered);
+
+                // T12262020-A-create-workshop
+                // By Jun 12/2020
+                _cmd.Parameters.AddWithValue("@post_excerpt", _p.post_excerpt);
                 _cmd.Parameters.AddWithValue("@post_status", _p.post_status);
                 _cmd.Parameters.AddWithValue("@comment_status", _p.comment_status);
                 _cmd.Parameters.AddWithValue("@ping_status", _p.ping_status);
