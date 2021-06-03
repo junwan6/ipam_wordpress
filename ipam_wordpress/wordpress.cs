@@ -58,7 +58,9 @@ namespace ipam_wordpress
         /// <summary>
         /// The unique identifier
         /// </summary>
-        private const String guid = "http://coruscant.ipam.ucla.edu/?post_type=programs&#038;p=";
+        /// private const String guid = "http://coruscant.ipam.ucla.edu/?post_type=programs&#038;p=";
+
+        private const String guid = "http://coruscant2.ipam.ucla.edu/?post_type=programs&#038;p="; 
         /// <summary>
         /// The key pc
         /// </summary>
