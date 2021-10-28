@@ -41,7 +41,10 @@ namespace ipam_wordpress
         /// in Wordpress post table need to have an value instead of null
         /// T12262020 - A - create - workshop
         /// private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_title, post_status, comment_status, ping_status, post_name, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_title, @post_status, @comment_status, @ping_status, @post_name, @post_parent, @post_type); SELECT last_insert_id();";
-        private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_name, to_ping, pinged, post_content_filtered, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_content, @post_title, @post_excerpt, @post_status, @comment_status, @ping_status, @post_name, @to_ping, @pinged, @post_content_filtered, @post_parent, @post_type); SELECT last_insert_id();";
+        /// This is the 12/2020 version
+        /// private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_name, to_ping, pinged, post_content_filtered, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_content, @post_title, @post_excerpt, @post_status, @comment_status, @ping_status, @post_name, @to_ping, @pinged, @post_content_filtered, @post_parent, @post_type); SELECT last_insert_id();";
+        /// insert-or-update-workshop-freeze - 10/25/2021
+        private const String i_post = "INSERT INTO wp_posts (post_author, post_date, post_date_gmt, post_content, post_title, post_excerpt, post_status, comment_status, ping_status, post_name, to_ping, pinged, post_modified, post_modified_gmt, post_content_filtered, post_parent, post_type) VALUES(@post_author, @post_date, @post_date_gmt, @post_content, @post_title, @post_excerpt, @post_status, @comment_status, @ping_status, @post_name, @to_ping, @pinged, @post_modified, @post_modified_gmt, @post_content_filtered, @post_parent, @post_type); SELECT last_insert_id();";
         /// <summary>
         /// The i meta
         /// </summary>
@@ -670,6 +673,12 @@ namespace ipam_wordpress
                 _cmd.Parameters.AddWithValue("@post_name", _p.post_slug);
                 _cmd.Parameters.AddWithValue("@post_parent", _p.post_parent);
                 _cmd.Parameters.AddWithValue("@post_type", _p.post_type);
+
+                // insert-or-update-workshop-freeze
+                _cmd.Parameters.AddWithValue("@post_modified", DateTime.Now);
+                _cmd.Parameters.AddWithValue("@post_modified_gmt", DateTime.Now);
+           
+
                 _p.post_id = Convert.ToInt32(_cmd.ExecuteScalar());
 
                 _p.guid = guid + _p.post_id.ToString();
