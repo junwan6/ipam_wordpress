@@ -15,6 +15,9 @@ using System;
 using System.Data;
 using System.Linq;
 using MySql.Data.MySqlClient;
+// START MOD: modify post name to remove special character
+using System.Text.RegularExpressions;
+// END MOD: modify post name to remove special character
 
 namespace ipam_wordpress
 {
@@ -576,7 +579,13 @@ namespace ipam_wordpress
         private static void setPostData(ref post _p, String _pn, Int32 _pt, Int32? _id)
         {
             _p.post_id = _id;
-            _p.post_slug = _pn.ToLower().Replace(",", "").Replace(":", "").Replace(";", "").Replace(".", "").Replace(' ', '-');
+            // START MOD: modify-post-name
+            // _p.post_slug = _pn.ToLower().Replace(",", "").Replace(":", "").Replace(";", "").Replace(".", "").Replace(' ', '-');
+            // _p.post_slug = _pn.ToLower().Replace(",", "").Replace(":", "").Replace(";", "").Replace(".", "").Replace(' ', '-').Replace("(", "").Replace(")", "").Replace("?", "");
+
+            _p.post_slug = Regex.Replace(_pn.ToLower(), @"[^0-9a-zA-Z]+", " ").Replace(' ', '-');
+
+            // END MOD: modify-post-name
             _p.post_title = _pn;
             // Added by Jun 12/2020
             // The post_content in Wordpress post table need to have an value instead of null
