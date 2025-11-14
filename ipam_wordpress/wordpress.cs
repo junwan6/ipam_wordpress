@@ -347,10 +347,12 @@ namespace ipam_wordpress
 
             _cmd.Connection = connection.mysql_conn;
             _cmd.CommandType = CommandType.Text;
-            _cmd.Prepare();
+         //   _cmd.Prepare(); -- move down
 
             _cmd.Parameters.AddWithValue("@_pc", _p.meta_fields.First(p => p.key == "program_code").value);
             _cmd.CommandText = _sql;
+
+            _cmd.Prepare();
             _p.post_id = Convert.ToInt32(_cmd.ExecuteScalar());
 
             connection.mysql_conn.Close();
@@ -372,10 +374,12 @@ namespace ipam_wordpress
 
             _cmd.Connection = connection.mysql_conn;
             _cmd.CommandType = CommandType.Text;
-            _cmd.Prepare();
+           // _cmd.Prepare(); -- move down
 
             _cmd.Parameters.AddWithValue("@_pc", _pc);
             _cmd.CommandText = _sql;
+
+            _cmd.Prepare();
             _pId = Convert.ToInt32(_cmd.ExecuteScalar());
 
             connection.mysql_conn.Close();
@@ -398,10 +402,12 @@ namespace ipam_wordpress
 
             _cmd.Connection = connection.mysql_conn;
             _cmd.CommandType = CommandType.Text;
-            _cmd.Prepare();
+          //  _cmd.Prepare(); --move down
 
             _cmd.Parameters.AddWithValue("@_pi", _p.post_id);
             _cmd.CommandText = _sql;
+
+            _cmd.Prepare();
             _cmd.ExecuteNonQuery();
 
             _da = new MySqlDataAdapter(_cmd);
@@ -743,13 +749,14 @@ namespace ipam_wordpress
                 _cmd.Connection = connection.mysql_conn;
                 _cmd.CommandType = CommandType.Text;
                 _cmd.CommandText = _sql;
-                _cmd.Prepare();
+            //    _cmd.Prepare(); -- move the statement to after the parameter
 
                 _cmd.Parameters.AddWithValue("@post_name", _p.post_slug);
                 _cmd.Parameters.AddWithValue("@post_title", _p.post_title);
                 _cmd.Parameters.AddWithValue("@guid", _p.guid);
                 _cmd.Parameters.AddWithValue("@post_ID", _p.post_id);
 
+                _cmd.Prepare();
                 _cmd.ExecuteNonQuery();
 
                 connection.mysql_conn.Close();
@@ -772,7 +779,7 @@ namespace ipam_wordpress
                         _cmd.Connection = connection.mysql_conn;
                         _cmd.CommandType = CommandType.Text;
                         _cmd.CommandText = _sql;
-                        _cmd.Prepare();
+                     //    _cmd.Prepare(); -- move down
 
                         _cmd.Parameters.Clear();
                         _cmd.Parameters.AddWithValue("@post_id", _p.post_id);
@@ -780,6 +787,7 @@ namespace ipam_wordpress
                         _cmd.Parameters.AddWithValue("@meta_value", _c.value);
 
                         _cmd.CommandText = _sql;
+                        _cmd.Prepare();
                         _cmd.ExecuteNonQuery();
 
                         connection.mysql_conn.Close();
